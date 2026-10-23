@@ -3,9 +3,8 @@
 (() => {
   'use strict';
 
-  const INK = '#141519';
-  const ACCENT = '#FF4F00';
-  const PAPER = '#F4F4F6';
+  // colours come from the page's tokens (read once the page has styled itself)
+  let INK = '#141519', ACCENT = '#ff4f00', PAPER = '#f4f4f6';
   const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ.:+';
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const TAU = Math.PI * 2;
@@ -557,6 +556,11 @@
   const words = { linemark: 'LINEMARK', voyage: 'VOYAGE', librarian: 'LIBRARIAN', xiv: 'XIVPLUGINS' };
 
   function init() {
+    const css = getComputedStyle(document.documentElement);
+    const token = (name, fallback) => css.getPropertyValue(name).trim() || fallback;
+    INK = token('--ink', INK);
+    ACCENT = token('--accent', ACCENT);
+    PAPER = token('--paper', PAPER);
     const eye = document.querySelector('canvas[data-ascii="hero"]');
     if (eye) hero(eye);
     for (const c of document.querySelectorAll('canvas[data-ascii]:not([data-ascii="hero"])')) {
@@ -570,6 +574,7 @@
   const toggle = document.querySelector('[data-motion]');
   const apply = () => {
     document.documentElement.classList.toggle('still', paused);
+    document.documentElement.classList.toggle('motion-on', !paused);
     if (toggle) {
       toggle.setAttribute('aria-pressed', String(paused));
       toggle.textContent = paused ? '[Play motion]' : '[Pause motion]';

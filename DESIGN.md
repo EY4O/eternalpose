@@ -166,7 +166,9 @@ A cool, slightly blue-grey neutral family with a single hot international-orange
 - **Subtitle** (750, 1.25rem, 1.15, 80% width): sub-product headings within a spread.
 - **Lead** (500, clamp(1.125rem, 1.6vw, 1.375rem), 1.35, max 25ch): the hero introduction.
 - **Body** (400, 1.0625rem, 1.55, 100% width): descriptions, max 46ch, pretty wrap.
-- **Label** (Departure Mono, 0.8125rem, 1.3, 0.05em, uppercase): buttons, top-bar links, project kind, facts lines, ticker, contact list, colophon.
+- **Label** (Departure Mono, 0.8125rem, 1.3, 0.05em, uppercase): buttons, top-bar links, project kind, facts lines, ticker, contact list, colophon. Below 860px the top bar's four controls drop to 0.75rem and 0.02em so they fit one line at normal text size; they wrap to a second row when text is enlarged.
+- **Maker line** (Anybody 600, 1rem): "Projects by Looneth" in the centre of the top bar, desktop only.
+- **Small body** (400, 0.9375rem, 1.4–1.45): project one-liners in the Projects strip and the Contact window's note.
 - **Chrome** (Departure Mono, 0.6875rem, 1, 0.06em, uppercase): window titles and the [+] control. Set in rem so it grows with the visitor's text size.
 
 ### Named Rules
@@ -186,7 +188,7 @@ The page has four movements. The hero fills the viewport (100svh) over a full-bl
 
 **End.** The striped EP monogram spans the full content width, with the Contact window laid over its upper right (top 8%, width min(360px, 80vw)), then a mono colophon.
 
-**Responsive (max-width 860px).** The top bar drops the wordmark and maker line, and its four bracketed controls spread edge to edge on one line (0.75rem, 0.02em). The Projects strip becomes stacked rows. The name grows to clamp(4.5rem, 24vw, 9rem), and the two words are held 66vw apart so the eye sits between them; the eye recentres there with a larger radius. The lead and Projects window return to normal flow. Spreads go to one column, and the overlap is kept by offsets instead of columns: ASCII window inset 6% on the right, screenshot pulled up 9% and inset 16% on the left, portrait shot pulled up 6% and narrowed (6% left, 34% right). The Contact window rises 12% into the monogram.
+**Responsive (max-width 860px).** The top bar drops the wordmark and maker line, and its four bracketed controls spread edge to edge on one line (0.75rem, 0.02em). The Projects strip becomes stacked rows. The name grows to clamp(4.5rem, 24vw, 9rem) (the phone size of Display), and the two words are held 66vw apart so the eye sits between them; the eye recentres there with a larger radius. The lead and Projects window return to normal flow. Spreads go to one column, and the overlap is kept by offsets instead of columns: ASCII window inset 6% on the right, screenshot pulled up 9% and inset 16% on the left, portrait shot pulled up 6% and narrowed (6% left, 34% right). The Contact window rises 12% into the monogram.
 
 ### Named Rules
 **The Overlap Rule.** A project's visuals are never side by side in tidy cells. The real screenshot window always overlaps its ASCII window, on the side away from the headline, and alternates spread to spread. Mobile keeps the overlap.
@@ -243,7 +245,7 @@ Each canvas is a grid of Departure Mono cells (hero 13px, or 10px under 700px wi
 - below 0.34: `+`
 - above that: a letter of the scene's word, picked by `(column + 3 × row) mod length`, so solid areas read as the word repeated (ETERNALPOSE, LINEMARK, VOYAGE, LIBRARIAN).
 
-Opacity is `alpha × (0.3 + 0.7 × density)`, quantised to twelfths (alpha 0.78 for the hero, 0.8 for scenes). Accent cells draw at full opacity in orange; everything else is ink. Backgrounds use a sparse dotted field (every other 14px block). Scenes animate only while visible (hero 30fps, scenes 24fps), and each frame redraws only the cells whose glyph, opacity or colour changed. The hero works out its fixed geometry (distances, angles, lid curves) once per resize. While motion is paused they draw one still frame and redraw only on change. The hero is the one exception: while paused it shows the compass, needle held north and gaze fixed, whether or not a project is chosen (choosing one only changes the word). Pausing or playing eases between eye and compass, so the only movement is the shape changing; a visit that starts paused opens on the compass.
+Opacity is `alpha × (0.3 + 0.7 × density)`, quantised to twelfths (alpha 0.78 for the hero, 0.8 for scenes). Accent cells draw at full opacity in orange; everything else is ink. The renderer reads ink, accent and paper from the page's CSS tokens when it starts, so a palette change is made once, in `:root`. Backgrounds use a sparse dotted field (every other 14px block). Scenes animate only while visible (hero 30fps, scenes 24fps), and each frame redraws only the cells whose glyph, opacity or colour changed. The hero works out its fixed geometry (distances, angles, lid curves) once per resize. While motion is paused they draw one still frame and redraw only on change. The hero is the one exception: while paused it shows the compass, needle held north and gaze fixed, whether or not a project is chosen (choosing one only changes the word). Pausing or playing eases between eye and compass, so the only movement is the shape changing; a visit that starts paused opens on the compass.
 
 - **Hero, eye to compass:** a dim field of turning rays surrounds an almond eye whose iris follows the pointer (and drifts on its own after 6s idle) and blinks every 3.5–7.5s. When a project row is hovered or focused, the lids open into a circle, the iris becomes a dial with 32 ticks and 4 major marks, a needle grows (orange north, ink south) and swings to point at that row, and the glyphs switch to the project's word. All of these ease exponentially (rate 7/s). Leaving the row releases it back to the eye. After 9s without input, the compass tours the projects, aiming 2.6s and resting 2.2s.
 - **Linemark:** three transit lines with ring stations; an orange train runs along the middle line.
@@ -253,6 +255,9 @@ Opacity is `alpha × (0.3 + 0.7 × density)`, quantised to twelfths (alpha 0.78 
 
 ### Striped EP Monogram
 "EP" in Anybody 900 at 60% width, stretched to the full content width and filled with horizontal ink stripes (7px bar, 4px gap). It closes the page and serves as the ground for the Contact window.
+
+### Social Card
+`images/og.png`, 1200×630: the hero alone (name and compass, needle north, with the intro, Projects window and links hidden), captured from the page itself. Referenced by `og:image` with `twitter:card` set to `summary_large_image`. Regenerate it whenever the hero changes.
 
 ## Do's and Don'ts
 
@@ -264,8 +269,8 @@ Opacity is `alpha × (0.3 + 0.7 × density)`, quantised to twelfths (alpha 0.78 
 - **Do** make a new ASCII scene spell its own word with the density ramp (`.` `:` `+` then letters), ink by default, with orange only for the subject that moves or arrives.
 - **Do** overlap each spread's real-screenshot window onto its ASCII window, and alternate the side from spread to spread.
 - **Do** mark one default button per product with the ring (3px ground gap, 1px ink line).
-- **Do** stop every animation (ticker, scenes, morph easing) and draw still frames while motion is paused. Paused follows prefers-reduced-motion until the visitor uses the [Pause motion] / [Play motion] toggle in the top bar, which is remembered (localStorage `ep-motion`).
-- **Do** give small chrome links (top bar, [+], contact, colophon) a 44px hit area with the `.hit` class, an invisible `::after` that extends 14px above and below and 8px to each side, so they keep their small look.
+- **Do** stop every animation (ticker, scenes, morph easing) and draw still frames while motion is paused. Paused follows prefers-reduced-motion until the visitor uses the [Pause motion] / [Play motion] toggle in the top bar, which is remembered (localStorage `ep-motion`). The toggle owns everything, the ticker included: the page carries `.still` when paused and `.motion-on` when playing, and the reduced-motion CSS stops the ticker only without `.motion-on`.
+- **Do** give small chrome links (top bar, [+], colophon) a 44px hit area with the `.hit` class, an invisible `::after` that extends 14px above and below and 8px to each side, so they keep their small look. Contact rows are 44px links in their own right (14px padding).
 
 ### Don't:
 - **Don't** round any corner.
