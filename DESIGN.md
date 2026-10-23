@@ -64,6 +64,28 @@ typography:
     fontWeight: 400
     lineHeight: 1
     letterSpacing: "0.06em"
+  display-compact:
+    fontFamily: "Anybody, system-ui, sans-serif"
+    fontSize: "clamp(4.5rem, 24vw, 9rem)"
+    fontWeight: 900
+    lineHeight: 0.8
+    fontVariation: "\"wdth\" 52"
+  maker:
+    fontFamily: "Anybody, system-ui, sans-serif"
+    fontSize: "1rem"
+    fontWeight: 600
+    lineHeight: 1.3
+  body-small:
+    fontFamily: "Anybody, system-ui, sans-serif"
+    fontSize: "0.9375rem"
+    fontWeight: 400
+    lineHeight: 1.4
+  label-compact:
+    fontFamily: "Departure Mono, ui-monospace, monospace"
+    fontSize: "0.75rem"
+    fontWeight: 400
+    lineHeight: 1.3
+    letterSpacing: "0.02em"
 spacing:
   gutter: "clamp(16px, 3vw, 40px)"
   column-gap: "clamp(12px, 2vw, 28px)"
