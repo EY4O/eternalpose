@@ -1,0 +1,158 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-23T00:00:00Z",
+  "title": "Design System: Eternal Pose",
+  "extensions": {
+    "colorMeta": {
+      "accent": { "role": "primary", "displayName": "International Orange", "canonical": "#ff4f00", "tonalRamp": ["#300000", "#5a0000", "#880000", "#b70000", "#e53300", "#ff6124", "#ff9667", "#ffc49b"] },
+      "ground": { "role": "neutral", "displayName": "Instrument Grey", "canonical": "#e6e7eb", "tonalRamp": ["#0a0b0e", "#232427", "#3f4043", "#5d5d61", "#7f8084", "#a3a4a8", "#c9cace", "#edeef2"] },
+      "paper": { "role": "neutral", "displayName": "Window Paper", "canonical": "#f4f4f6", "tonalRamp": ["#0b0b0c", "#242425", "#3f3f41", "#5d5d5f", "#808082", "#a4a4a6", "#cacacc", "#eeeef0"] },
+      "ink": { "role": "neutral", "displayName": "Cathode Ink", "canonical": "#141519", "tonalRamp": ["#0a0b0f", "#232428", "#3e3f44", "#5c5d62", "#7f8085", "#a3a4aa", "#c9cad0", "#edeef4"] },
+      "ink-2": { "role": "neutral", "displayName": "Graphite", "canonical": "#474a53", "tonalRamp": ["#090b12", "#21242c", "#3d3f48", "#5a5d67", "#7d808a", "#a1a4af", "#c7cad5", "#eaeef9"] },
+      "ink-3": { "role": "neutral", "displayName": "Slate", "canonical": "#5c5f68", "tonalRamp": ["#090b12", "#21242b", "#3d3f48", "#5a5d66", "#7d8089", "#a1a4ae", "#c7cad5", "#ebeef9"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "The hero name only, two words pinned to opposite corners. Uppercase, font-stretch 52%." },
+      "headline": { "displayName": "Headline", "purpose": "Project names opening each spread. Uppercase, font-stretch 52%." },
+      "title": { "displayName": "Title", "purpose": "Each project's one-line pitch, balanced wrap." },
+      "title-index": { "displayName": "Title, index", "purpose": "Project names in the Projects window. Uppercase." },
+      "subtitle": { "displayName": "Subtitle", "purpose": "Sub-product headings within a spread." },
+      "lead": { "displayName": "Lead", "purpose": "The hero introduction, max 25ch." },
+      "body": { "displayName": "Body", "purpose": "Descriptions, max 46ch, pretty wrap." },
+      "label": { "displayName": "Label", "purpose": "Uppercase mono for buttons, chrome links, kinds, facts, ticker, contact, colophon." },
+      "chrome": { "displayName": "Chrome", "purpose": "Uppercase mono for window titles and the [+] control." }
+    },
+    "shadows": [
+      { "name": "window", "value": "0 22px 44px -22px rgb(20 21 25 / 0.5), 0 3px 10px -4px rgb(20 21 25 / 0.2)", "purpose": "Every retro-OS window and nothing else." },
+      { "name": "default-ring", "value": "0 0 0 3px var(--ground), 0 0 0 4px var(--ink)", "purpose": "The default button's ring: a ground gap and a 1px ink line. A shape, not elevation." }
+    ],
+    "motion": [
+      { "name": "hover", "value": "background-color 0.12s, color 0.12s", "purpose": "Button and index-row fills; none under reduced motion." },
+      { "name": "press", "value": "translateY(1px)", "purpose": "Button active state." },
+      { "name": "ascii-ease", "value": "x += (target - x) * (1 - exp(-7/60)) per frame", "purpose": "Eye-to-compass morph, gaze and needle (needle 1.3x faster); snaps under reduced motion." },
+      { "name": "ticker", "value": "translateX(-50%) over 70s linear infinite", "purpose": "The ink ticker; stops under reduced motion." },
+      { "name": "blink", "value": "0.18s every 3.5-7.5s", "purpose": "Hero eye blink, only while it is an eye." },
+      { "name": "compass-tour", "value": "after 9s idle: aim 2.6s, rest 2.2s", "purpose": "The compass points at each project in turn when left alone." },
+      { "name": "scene-rate", "value": "hero 30fps, scenes 24fps, only while visible; only changed cells redraw", "purpose": "ASCII canvases; still frames while motion is paused (follows reduced motion until the visitor uses the toggle)." }
+    ],
+    "breakpoints": [
+      { "name": "small-canvas", "value": "500px", "purpose": "Project ASCII cells shrink (canvas width)." },
+      { "name": "hero-canvas", "value": "700px", "purpose": "Hero ASCII cells shrink from 13px to 10px (canvas width)." },
+      { "name": "stack", "value": "860px", "purpose": "Single-column layout, overlap kept by offsets." }
+    ],
+    "overlays": [
+      { "name": "cathode", "value": "repeating-linear-gradient(to bottom, rgb(20 21 25 / 0.045) 0 1px, transparent 1px 3px), radial-gradient(120% 90% at 50% 45%, transparent 55%, rgb(20 21 25 / 0.1))", "purpose": "One fixed, pointer-transparent overlay on body::after at z-index 40." },
+      { "name": "pinstripe", "value": "repeating-linear-gradient(to bottom, var(--ink) 0 1px, transparent 1px 3px) 0 7px / 100% 12px no-repeat", "purpose": "Window title-bar stripes." },
+      { "name": "monogram-stripe", "value": "pattern 10x11, 7px ink bar", "purpose": "Fill of the EP monogram." }
+    ],
+    "ascii": {
+      "font": "Departure Mono",
+      "densityRamp": [ { "below": 0.05, "glyph": "" }, { "below": 0.14, "glyph": "." }, { "below": 0.24, "glyph": ":" }, { "below": 0.34, "glyph": "+" }, { "below": 1.01, "glyph": "word[(col + 3*row) % word.length]" } ],
+      "opacity": "round(min(1, alpha * (0.3 + 0.7 * density)) * 12) / 12; accent cells 1",
+      "alpha": { "hero": 0.78, "scenes": 0.8 },
+      "cellPx": { "hero": "13 (10 below 700px)", "linemark": "11 (9 below 500px)", "librarian": "11 (9 below 500px)", "voyage": "9 (7 below 500px)" },
+      "words": { "hero": "ETERNALPOSE, or the hovered project's name", "linemark": "LINEMARK", "voyage": "VOYAGE", "librarian": "LIBRARIAN" },
+      "accentReservedFor": ["compass needle (north half)", "Linemark train", "Model Librarian arriving book", "Straw Hat band (Voyage window only)"]
+    }
+  },
+  "components": [
+    {
+      "name": "Button",
+      "kind": "button",
+      "refersTo": "button",
+      "description": "Square system button in uppercase mono; hover fills orange behind the ink label.",
+      "html": "<a class=\"ds-btn\" href=\"#\">Add to Edge</a>",
+      "css": ".ds-btn { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border: 1px solid #141519; background: #f4f4f6; color: #141519; font: 0.8125rem/1 'Departure Mono', ui-monospace, monospace; text-transform: uppercase; letter-spacing: 0.05em; text-decoration: none; border-radius: 0; transition: background-color 0.12s, color 0.12s; } .ds-btn:hover { background: #ff4f00; } .ds-btn:active { transform: translateY(1px); } .ds-btn:focus-visible { outline: 2px solid #141519; outline-offset: 3px; }"
+    },
+    {
+      "name": "Default Button",
+      "kind": "button",
+      "refersTo": "button-default",
+      "description": "The one recommended action per product: ink fill with the classic default-button ring.",
+      "html": "<a class=\"ds-btn-default\" href=\"#\">Add to Chrome</a>",
+      "css": ".ds-btn-default { display: inline-flex; align-items: center; min-height: 44px; margin: 4px 6px 4px 4px; padding: 0 16px; border: 1px solid #141519; background: #141519; color: #f4f4f6; box-shadow: 0 0 0 3px #e6e7eb, 0 0 0 4px #141519; font: 0.8125rem/1 'Departure Mono', ui-monospace, monospace; text-transform: uppercase; letter-spacing: 0.05em; text-decoration: none; border-radius: 0; transition: background-color 0.12s, color 0.12s; } .ds-btn-default:hover { background: #ff4f00; color: #141519; } .ds-btn-default:active { transform: translateY(1px); } .ds-btn-default:focus-visible { outline: 2px solid #141519; outline-offset: 3px; }"
+    },
+    {
+      "name": "Retro-OS Window",
+      "kind": "card",
+      "refersTo": "window",
+      "description": "Every content container: paper pane, 1px ink frame, pinstriped title bar, close box, [+] when it opens a project.",
+      "html": "<figure class=\"ds-win\"><div class=\"ds-win-bar\"><span class=\"ds-win-box\"></span><span class=\"ds-win-title\">Linemark</span><a class=\"ds-win-plus\" href=\"#\">[+]</a></div><div class=\"ds-win-body\">Window content</div></figure>",
+      "css": ".ds-win { margin: 0; background: #f4f4f6; color: #141519; border: 1px solid #141519; border-radius: 0; box-shadow: 0 22px 44px -22px rgb(20 21 25 / 0.5), 0 3px 10px -4px rgb(20 21 25 / 0.2); } .ds-win-bar { display: flex; align-items: center; gap: 10px; min-height: 1.625rem; padding: 0 8px; border-bottom: 1px solid #141519; font: 0.6875rem/1 'Departure Mono', ui-monospace, monospace; text-transform: uppercase; letter-spacing: 0.06em; background: #f4f4f6 repeating-linear-gradient(to bottom, #141519 0 1px, transparent 1px 3px) 0 7px / 100% 12px no-repeat; } .ds-win-box { flex: none; width: 0.75rem; height: 0.75rem; border: 1px solid #141519; background: #f4f4f6; } .ds-win-title { margin: 0 auto; padding: 0 8px; background: #f4f4f6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .ds-win-plus { flex: none; padding: 3px 5px; background: #f4f4f6; color: inherit; text-decoration: none; } .ds-win-plus:hover { background: #141519; color: #f4f4f6; } .ds-win-plus:focus-visible { outline: 2px solid #141519; outline-offset: 3px; } .ds-win-body { padding: 16px; font: 400 1.0625rem/1.55 'Anybody', system-ui, sans-serif; }"
+    },
+    {
+      "name": "Projects Index Row",
+      "kind": "nav",
+      "refersTo": "index-row",
+      "description": "A row in the Projects window: condensed name, mono kind, graphite one-liner; inverts to ink on hover and focus, and aims the hero compass.",
+      "html": "<ul class=\"ds-index\"><li><a href=\"#\"><span class=\"ds-pname\">Linemark</span><span class=\"ds-pkind\">Chrome + Edge</span><span class=\"ds-pline\">Bookmarks drawn like a transit map.</span></a></li><li><a href=\"#\"><span class=\"ds-pname\">Voyage Tracker</span><span class=\"ds-pkind\">Web app</span><span class=\"ds-pline\">One Piece in order, without spoilers.</span></a></li></ul>",
+      "css": ".ds-index { margin: 0; padding: 0; list-style: none; background: #f4f4f6; border: 1px solid #141519; color: #141519; } .ds-index { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); } .ds-index li + li { border-left: 1px solid #141519; } .ds-index a { display: grid; gap: 8px; height: 100%; padding: 16px 18px 18px; color: inherit; text-decoration: none; transition: background-color 0.12s, color 0.12s; } .ds-pname { font: 800 clamp(1.625rem, 2.6vw, 2.5rem)/0.95 'Anybody', system-ui, sans-serif; font-stretch: 62%; text-transform: uppercase; } .ds-pkind { color: #5c5f68; font: 0.8125rem/1.3 'Departure Mono', ui-monospace, monospace; text-transform: uppercase; letter-spacing: 0.05em; } .ds-pline { color: #474a53; font: 400 0.9375rem/1.4 'Anybody', system-ui, sans-serif; } .ds-index a:hover, .ds-index a:focus-visible { background: #141519; color: #f4f4f6; outline: 2px solid #f4f4f6; outline-offset: -5px; } .ds-index a:hover .ds-pkind, .ds-index a:hover .ds-pline, .ds-index a:focus-visible .ds-pkind, .ds-index a:focus-visible .ds-pline { color: inherit; }"
+    },
+    {
+      "name": "Ticker",
+      "kind": "custom",
+      "refersTo": "ticker",
+      "description": "Full-bleed ink band of paper mono scrolling left, orange + separators.",
+      "html": "<div class=\"ds-ticker\" aria-hidden=\"true\"><div class=\"ds-ticker-track\"><p>Eternal Pose is the compass that always points to one island<b>+</b>Linemark<b>+</b>Voyage Tracker<b>+</b>Model Librarian<b>+</b></p><p>Eternal Pose is the compass that always points to one island<b>+</b>Linemark<b>+</b>Voyage Tracker<b>+</b>Model Librarian<b>+</b></p></div></div>",
+      "css": ".ds-ticker { overflow: hidden; background: #141519; color: #f4f4f6; font: 0.8125rem/1.3 'Departure Mono', ui-monospace, monospace; text-transform: uppercase; letter-spacing: 0.05em; } .ds-ticker-track { display: flex; width: max-content; animation: ds-tick 70s linear infinite; } .ds-ticker p { margin: 0; padding: 11px 0; white-space: nowrap; } .ds-ticker b { color: #ff4f00; font-weight: 400; padding: 0 1.25em; } @keyframes ds-tick { to { transform: translateX(-50%); } } .still .ds-ticker-track { animation-play-state: paused; }"
+    },
+    {
+      "name": "Chrome Link",
+      "kind": "nav",
+      "refersTo": "label",
+      "description": "Bracketed uppercase mono link for the top bar; orange underline on hover.",
+      "html": "<nav class=\"ds-bar\"><a href=\"#\">[GitHub]</a><a href=\"#\">[Ko-fi]</a><a href=\"#\">[Email]</a></nav>",
+      "css": ".ds-bar { display: flex; gap: 16px; font: 0.8125rem/1.3 'Departure Mono', ui-monospace, monospace; text-transform: uppercase; letter-spacing: 0.05em; color: #141519; } .ds-bar a { color: inherit; text-decoration: none; text-decoration-thickness: 2px; text-underline-offset: 4px; } .ds-bar a:hover { text-decoration: underline; text-decoration-color: #ff4f00; } .ds-bar a:focus-visible { outline: 2px solid #141519; outline-offset: 3px; }"
+    },
+    {
+      "name": "Striped EP Monogram",
+      "kind": "custom",
+      "refersTo": "display",
+      "description": "EP in Anybody 900 at 60% width, stretched to full width, filled with 7px ink stripes on an 11px period.",
+      "html": "<svg class=\"ds-ep\" viewBox=\"0 0 1000 520\" role=\"img\" aria-label=\"Eternal Pose\"><defs><pattern id=\"ds-stripes\" width=\"10\" height=\"11\" patternUnits=\"userSpaceOnUse\"><rect width=\"10\" height=\"7\" fill=\"#141519\"/></pattern></defs><text x=\"0\" y=\"500\" textLength=\"1000\" lengthAdjust=\"spacingAndGlyphs\" fill=\"url(#ds-stripes)\" style=\"font: 900 640px 'Anybody', sans-serif; font-stretch: 60%;\">EP</text></svg>",
+      "css": ".ds-ep { display: block; width: 100%; height: auto; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Compass on the Desktop",
+    "overview": "Eternal Pose is a cool grey retro-OS desktop seen through a cathode screen. Everything that holds content is a window: a paper-white pane, a 1px ink frame, a pinstriped title bar with a close box. Behind and inside those windows, living ASCII drawings in Departure Mono spell their own names: an eye in the hero that becomes a compass when a project is chosen, and one animated scene per project. Display type is Anybody squeezed to its narrowest, heaviest cut, shouting in uppercase at sizes that crowd the viewport.\n\nThe page is light, near-monochrome and dense with texture rather than color. Ink on grey does all the work; a single international orange marks the one thing that moves with intent, whether that is the compass needle, the train, the arriving book or the hat band. Layout is editorial, not a card grid. Big names, an offset reading column, and windows that overlap each other like a working desktop.\n\nThe One Piece reference stays a nod. The name and the compass carry it; the only One Piece artwork is the Straw Hat Jolly Roger in the Voyage Tracker's ASCII window, a user-approved exception.",
+    "keyCharacteristics": [
+      "Cool grey ground under fixed scanlines and a soft vignette.",
+      "Retro-OS windows: square corners, 1px ink frame, pinstriped title bar, close box, optional [+] link.",
+      "Anybody at 52% width and weight 900 for display; Departure Mono for every piece of chrome.",
+      "ASCII canvases whose glyphs spell a per-scene word, with density choosing the glyph.",
+      "One orange accent, reserved in the drawings for the subject that moves.",
+      "Overlapping, alternating project spreads on a 12-column grid."
+    ],
+    "rules": [
+      { "name": "The Needle Rule", "body": "In the ASCII drawings, orange marks only the subject in motion or arrival (needle north, train, arriving book, hat band), and accent cells always draw at full opacity. Every other glyph is ink.", "section": "colors" },
+      { "name": "The Orange Is Never Text Rule", "body": "Orange on paper is 3.0:1, so orange never sets running text or labels on light grounds. It fills (with ink text on top, 5.5:1), underlines, or sits on the ink ticker.", "section": "colors" },
+      { "name": "The Width Is Volume Rule", "body": "Display and headline sit at 52% width and weight 900; titles open out to 62–80%; reading text returns to 100%. Never set a display line at normal width, and never set body condensed.", "section": "typography" },
+      { "name": "The Mono Is Machinery Rule", "body": "Departure Mono is for chrome, labels, buttons and ASCII glyphs only, always uppercase. Prose is never mono.", "section": "typography" },
+      { "name": "The Bracket Rule", "body": "Standalone navigation links in the chrome are bracketed: [eternalpose.io], [GitHub], [Ko-fi], [Email], [+].", "section": "typography" },
+      { "name": "The Overlap Rule", "body": "A project's visuals are never side by side in tidy cells. The real screenshot window always overlaps its ASCII window, on the side away from the headline, and alternates spread to spread. Mobile keeps the overlap.", "section": "layout" },
+      { "name": "The One Shadow Rule", "body": "There is one shadow and it belongs to windows. Buttons, rows and text never cast one.", "section": "elevation" },
+      { "name": "The Cathode Rule", "body": "One fixed overlay covers the viewport at z-index 40 and never takes pointer input. It carries 1px ink scanlines at 4.5% opacity every 3px and a radial vignette darkening to 10% at the edges. Scanlines are never added per component.", "section": "elevation" },
+      { "name": "The Square Corner Rule", "body": "No radius anywhere. Windows, buttons, canvases and images all meet at right angles.", "section": "shapes" }
+    ],
+    "dos": [
+      "Do put every content group in a retro-OS window: paper, 1px ink frame, 1.625rem pinstriped title bar, 0.75rem close box, square corners, the one window shadow.",
+      "Do give a window a [+] only when it opens that project's home.",
+      "Do set display and headline in Anybody 900 at 52% width, uppercase, line-height 0.8.",
+      "Do set every label, button and window title in uppercase Departure Mono, and bracket standalone chrome links.",
+      "Do make a new ASCII scene spell its own word with the density ramp (`.` `:` `+` then letters), ink by default, with orange only for the subject that moves or arrives.",
+      "Do overlap each spread's real-screenshot window onto its ASCII window, and alternate the side from spread to spread.",
+      "Do mark one default button per product with the ring (3px ground gap, 1px ink line).",
+      "Do stop every animation (ticker, scenes, morph easing) and draw still frames under prefers-reduced-motion."
+    ],
+    "donts": [
+      "Don't round any corner.",
+      "Don't set orange text on paper or ground (3.0:1); use orange as a fill, an underline or on ink.",
+      "Don't add a second accent color or tint the greys.",
+      "Don't add shadows to anything but windows, or scanlines to anything but the single fixed overlay.",
+      "Don't set prose in Departure Mono or headlines at normal width.",
+      "Don't lay projects out as a grid of equal cards.",
+      "Don't add One Piece artwork, characters or screenshots of its art. The Straw Hat Jolly Roger in the Voyage Tracker's ASCII window is the only exception."
+    ]
+  }
+}
