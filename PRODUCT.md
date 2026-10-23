@@ -36,7 +36,7 @@ One maker's small set of carefully made tools, each with its own subdomain or re
 ## Brand Commitments
 
 - Name: Eternal Pose. Maker name: Looneth.
-- The One Piece reference stays a nod: no One Piece artwork, screenshots of its art, or characters on the hub. One user-requested exception (2026-10-22): the Voyage Tracker's window draws the Straw Hat Jolly Roger in ASCII.
+- The One Piece reference stays a nod: no One Piece artwork, screenshots of its art, or characters on the hub. User-requested exceptions: the Voyage Tracker's window draws the Straw Hat Jolly Roger in ASCII (2026-10-22), and the XIV Plugins window draws Y'shtola and a moogle in ASCII from a FINAL FANTASY XIV Fan Kit illustration (2026-10-23). The user chose not to show a "© SQUARE ENIX" credit line, which the Fan Kit and materials licence terms ask for.
 
 ## Evidence on Hand
 

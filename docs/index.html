@@ -104,6 +104,7 @@
   .p-visual .win { grid-row: 1; }
   .ascii-win { grid-column: 1 / 9; }
   .ascii-win canvas { display: block; width: 100%; aspect-ratio: 16 / 10; background: var(--paper); }
+  .ascii-win canvas[data-ascii="xiv"] { background: var(--ink); } /* the portrait reads as light on a dark capture screen */
   .shot { grid-column: 7 / -1; align-self: end; z-index: 1; margin-bottom: -9%; }
   .shot img { display: block; width: 100%; height: auto; }
   .flip .p-name { grid-column: 5 / -1; grid-row: 1; text-align: right; }
@@ -140,6 +141,7 @@
     .p-side { margin-top: 20px; }
     .p-visual { grid-template-columns: minmax(0, 1fr); }
     .project .p-visual .ascii-win { grid-column: 1; grid-row: 1; margin-right: 6%; }
+    .ascii-win canvas[data-ascii="xiv"] { aspect-ratio: 1; } /* room for the portrait's face */
     .project .p-visual .shot { grid-column: 1; grid-row: 2; align-self: start; margin: -9% 0 0 16%; }
     .project .p-visual .shot.tall { grid-row: 3; margin: -6% 34% 0 6%; }
     .contact { position: relative; right: auto; top: auto; width: auto; margin-top: -12%; }

@@ -146,7 +146,7 @@ A cool, slightly blue-grey neutral family with a single hot international-orange
 - **Slate** (ink-3): metadata in mono: project kind, facts lines, contact handles, the colophon. Measured 5.2:1 on ground and 5.8:1 on paper.
 
 ### Named Rules
-**The Needle Rule.** In the ASCII drawings, orange marks only the subject in motion or arrival (needle north, train, arriving book, hat band, newest bag item), and accent cells always draw at full opacity. Every other glyph is ink.
+**The Needle Rule.** In the ASCII drawings, orange marks only the subject in motion or arrival (needle north, train, arriving book, hat band, the moogle's pom-pom), and accent cells always draw at full opacity. Every other glyph is ink.
 
 **The Orange Is Never Text Rule.** Orange on paper is 3.0:1, so orange never sets running text or labels on light grounds. It fills (with ink text on top, 5.5:1), underlines, or sits on the ink ticker.
 
@@ -249,7 +249,7 @@ Opacity is `alpha × (0.3 + 0.7 × density)`, quantised to twelfths (alpha 0.78 
 - **Linemark:** three transit lines with ring stations; an orange train runs along the middle line.
 - **Voyage Tracker:** the Straw Hat Jolly Roger in outline, with crossed bones, rippling like cloth. The hat band is orange.
 - **Model Librarian:** three shelves of books; one orange book drops into the gap on the middle shelf every 7s.
-- **XIV Plugins:** a 35-slot bag page (7 × 5) filling one item every 1.1s, the newest item orange, then emptying. On a phone a shopping list sits beside it, one line ticked off every five items (the newest tick orange); on desktop the screenshot window covers the left of this canvas, so the bag sits on the right and the list is left out.
+- **XIV Plugins:** Y'shtola and a moogle from the FINAL FANTASY XIV Fan Kit, drawn from `images/xiv-portrait.png` (200px wide) and `images/xiv-moogle.png` (80px wide): red brightness, green linework, blue the moogle's pom-pom, alpha the figure. This one window is inverted: paper glyphs on an ink canvas, density following brightness with linework left dark, at a 7px cell so her face has about 75 rows (square on phones for the same reason). A bright white capture line sweeps down the portrait every 6.5s (RePlate saving a portrait). The moogle bobs beside her head with a crisp outline and a dark one-cell gap that keeps it apart from her white hair; its pom-pom is the window's orange. On desktop the portrait sits from 34% of the canvas width, clear of the screenshot window.
 
 ### Striped EP Monogram
 "EP" in Anybody 900 at 60% width, stretched to the full content width and filled with horizontal ink stripes (7px bar, 4px gap). It closes the page and serves as the ground for the Contact window.

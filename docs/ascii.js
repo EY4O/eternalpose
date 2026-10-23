@@ -5,6 +5,7 @@
 
   const INK = '#141519';
   const ACCENT = '#FF4F00';
+  const PAPER = '#F4F4F6';
   const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ.:+';
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const TAU = Math.PI * 2;
@@ -23,12 +24,12 @@
     const cw = Math.ceil(ctx.measureText('M').width);
     const ch = Math.ceil(fs * 1.2);
     c.width = cw * CHARS.length;
-    c.height = ch * 2;
+    c.height = ch * 3;
     ctx = c.getContext('2d');
     ctx.font = font;
     ctx.textBaseline = 'middle';
     ctx.textAlign = 'center';
-    [INK, ACCENT].forEach((colour, row) => {
+    [INK, ACCENT, PAPER].forEach((colour, row) => { // rows: ink, accent, and paper for inverted windows
       ctx.fillStyle = colour;
       for (let k = 0; k < CHARS.length; k++) ctx.fillText(CHARS[k], k * cw + cw / 2, row * ch + ch / 2);
     });
@@ -91,7 +92,7 @@
           ctx.clearRect(i * cw, j * ch, cw, ch);
           if (!code) continue;
           if (level !== lastA) { ctx.globalAlpha = level / 12; lastA = level; }
-          ctx.drawImage(c, k * cw, out.acc ? ch : 0, cw, ch, i * cw, j * ch, cw, ch);
+          ctx.drawImage(c, k * cw, out.acc ? ch : opts.invert ? ch * 2 : 0, cw, ch, i * cw, j * ch, cw, ch);
         }
       }
       ctx.globalAlpha = 1;
@@ -467,61 +468,87 @@
     };
   }
 
-  // ---------- XIV Plugins: a bag filling slot by slot, and the shopping list ticking off ----------
+  // ---------- XIV Plugins: Y'shtola and a moogle, from the FINAL FANTASY XIV Fan Kit ----------
+  // images/xiv-portrait.png (200px wide) and images/xiv-moogle.png (80px wide): red = brightness,
+  // green = linework, blue = the moogle's pom-pom, alpha = the figure. FINAL FANTASY XIV (c) SQUARE ENIX.
+  // A bright capture line sweeps down the portrait (RePlate saving a portrait); the moogle bobs beside her,
+  // its pom-pom the orange that moves.
   function xiv() {
-    let gx = 0, gy = 0, slot = 1, gap = 1, lx = 0, ly = 0, rowH = 1, lw = 1, box = 1, th = 3, list = true;
-    const COLS = 7, ROWS = 5, LIST = 6, PER = 5; // a 35-slot bag page; one list line done every five items
-    const lengths = [0.86, 0.62, 0.74, 0.5, 0.8, 0.58];
+    const SWEEP = 6.5; // seconds for one capture pass
+    let view = null;
+    const maps = {};
+    const box = { portrait: { x: 0, y: 0, w: 1, h: 1 }, moogle: { x: 0, y: 0, w: 1, h: 1 } };
+    const load = (name, src) => {
+      const img = new Image();
+      img.onload = () => {
+        const c = document.createElement('canvas');
+        c.width = img.width;
+        c.height = img.height;
+        const g = c.getContext('2d', { willReadFrequently: true });
+        g.drawImage(img, 0, 0);
+        maps[name] = { data: g.getImageData(0, 0, c.width, c.height).data, w: c.width, h: c.height };
+        fit();
+        if (view) view.dirty = true;
+      };
+      img.src = src;
+    };
+    load('portrait', 'images/xiv-portrait.png');
+    load('moogle', 'images/xiv-moogle.png');
+    const fit = () => {
+      const P = maps.portrait, M = maps.moogle;
+      if (!view || !P || !M) return;
+      // on desktop the screenshot window covers about the left third of this canvas
+      const wide = view.w > 520;
+      const p = box.portrait, m = box.moogle;
+      p.h = wide ? view.h * 0.94 : Math.min(view.h, (view.w * 0.8) * (P.h / P.w));
+      p.w = p.h * (P.w / P.h);
+      p.x = wide ? view.w * 0.34 : view.w * 0.03;
+      p.y = view.h - p.h;
+      m.h = view.h * (wide ? 0.52 : 0.4);
+      m.w = m.h * (M.w / M.h);
+      m.x = Math.min(view.w - m.w - view.w * 0.01, p.x + p.w * 0.92);
+      m.y = view.h * 0.16;
+    };
+    const sample = (map, u, v, ch) => {
+      const x = Math.min(map.w - 1, Math.max(0, Math.floor(u * map.w)));
+      const y = Math.min(map.h - 1, Math.max(0, Math.floor(v * map.h)));
+      return map.data[(y * map.w + x) * 4 + ch] / 255;
+    };
     return {
-      setup({ w, h, atlas, dpr }) {
-        th = Math.max(3, (atlas.ch / dpr) * 0.5);
-        // on desktop the screenshot window covers the left of this canvas, so the bag sits on the right
-        // and the list is left out; on a phone the windows stack and both fit
-        list = w <= 520;
-        slot = Math.min((w * (list ? 0.52 : 0.6)) / COLS, (h * 0.78) / ROWS);
-        gap = slot * 0.16;
-        gx = list ? w * 0.06 : w - COLS * slot - w * 0.05;
-        gy = (h - ROWS * slot) / 2;
-        lx = w * 0.64;
-        lw = w * 0.3;
-        rowH = (h * 0.7) / LIST;
-        ly = h * 0.15;
-        box = Math.min(rowH * 0.5, lw * 0.12);
-      },
-      at(px, py, t, out) {
+      setup(v) { view = v; fit(); },
+      at(px, py, t, out, i, j, v) {
         if (((px / 14) | 0) % 2 === 0 && ((py / 14) | 0) % 2 === 0) out.v = 0.06;
-        const filled = Math.floor((t / 1.1) % (COLS * ROWS + 6)); // items in the bag, then a short pause, then empty again
-        // the bag
-        const c = Math.floor((px - gx) / slot), r = Math.floor((py - gy) / slot);
-        if (c >= 0 && c < COLS && r >= 0 && r < ROWS) {
-          const sx = px - gx - c * slot, sy = py - gy - r * slot;
-          if (sx < gap / 2 || sy < gap / 2 || sx > slot - gap / 2 || sy > slot - gap / 2) return;
-          const n = r * COLS + c;
-          const edge = sx < gap / 2 + th || sy < gap / 2 + th || sx > slot - gap / 2 - th || sy > slot - gap / 2 - th;
-          if (edge) { out.v = 0.5; return; }
-          if (n < filled) {
-            const inset = slot * 0.26;
-            const item = sx > inset && sy > inset && sx < slot - inset && sy < slot - inset;
-            out.v = item ? 0.92 : 0.12;
-            if (item && n === filled - 1) out.acc = 1;
-          } else out.v = 0;
-          return;
+        const P = maps.portrait, M = maps.moogle;
+        if (!P || !M) return;
+        const row = (v.atlas.ch / v.dpr);
+
+        // the moogle, bobbing; its pom-pom glows orange
+        const m = box.moogle;
+        const mu = (px - m.x) / m.w, mv = (py - m.y - row * 1.6 * Math.sin(t * 1.7)) / m.h;
+        const du = (v.atlas.cw / v.dpr) / m.w, dv = row / m.h;
+        const inside = (uu, vv) => uu >= 0 && uu <= 1 && vv >= 0 && vv <= 1 && sample(M, uu, vv, 3) > 0.4;
+        // a dark gap round the moogle keeps it apart from her white hair
+        if (!inside(mu, mv) && (inside(mu - du * 1.5, mv) || inside(mu + du * 1.5, mv) || inside(mu, mv - dv * 1.2) || inside(mu, mv + dv * 1.2))) return;
+        if (inside(mu, mv)) {
+          if (sample(M, mu, mv, 2) > 0.5) { out.v = 1; out.acc = 1; return; }
+          // a crisp outline: any neighbouring cell's centre falls outside the moogle
+          if (!inside(mu - du, mv) || !inside(mu + du, mv) || !inside(mu, mv - dv) || !inside(mu, mv + dv)) { out.v = 0.9; return; }
+          const val = clamp(0.06 + 0.9 * Math.pow(sample(M, mu, mv, 0), 1.4) - 0.5 * sample(M, mu, mv, 1), 0, 1);
+          if (val >= 0.05) { out.v = val; return; }
         }
-        // the shopping list
-        if (!list) return;
-        const k = Math.floor((py - ly) / rowH);
-        if (k < 0 || k >= LIST || px < lx || px > lx + lw) return;
-        const yy = py - ly - k * rowH - (rowH - box) / 2;
-        const done = Math.floor(filled / PER);
-        if (px < lx + box) {
-          if (yy < 0 || yy > box) return;
-          const edge = px < lx + th || px > lx + box - th || yy < th || yy > box - th;
-          if (k < done) { out.v = edge ? 0.95 : 0.9; if (k === done - 1 && filled % PER < 2) out.acc = 1; }
-          else if (edge) out.v = 0.9;
-          return;
-        }
-        const tx = px - lx - box * 1.6;
-        if (tx > 0 && tx < (lw - box * 1.6) * lengths[k] && Math.abs(yy - box / 2) < th) out.v = k < done ? 0.3 : 0.9;
+
+        // the portrait
+        const p = box.portrait;
+        const u = (px - p.x) / p.w, w = (py - p.y) / p.h;
+        if (u < 0 || u > 1 || w < 0 || w > 1) return;
+        const a = sample(P, u, w, 3);
+        if (a < 0.3) return;
+        const val = a * clamp(0.02 + 0.95 * Math.pow(sample(P, u, w, 0), 1.5) - 0.55 * sample(P, u, w, 1), 0, 1);
+        if (val < 0.05) return;
+        out.v = val;
+        // the capture line: a bright band moving down the portrait, then a pause before the next pass
+        const scan = ((t % SWEEP) / SWEEP) * 1.35 - 0.15;
+        if (Math.abs(w - scan) < row / p.h * 0.6 && val > 0.12) out.v = 1;
       },
     };
   }
@@ -534,7 +561,7 @@
     if (eye) hero(eye);
     for (const c of document.querySelectorAll('canvas[data-ascii]:not([data-ascii="hero"])')) {
       const name = c.dataset.ascii;
-      view(c, { cell: (w) => (name === 'voyage' ? (w < 500 ? 7 : 9) : w < 500 ? 9 : 11), alpha: 0.8, fps: 24, still: 14, scene: scenes[name](), word: () => words[name] });
+      view(c, { invert: name === 'xiv', cell: (w) => (name === 'voyage' || name === 'xiv' ? (w < 500 ? 7 : name === 'xiv' ? 7 : 9) : w < 500 ? 9 : 11), alpha: name === 'xiv' ? 0.95 : 0.8, fps: 24, still: 14, scene: scenes[name](), word: () => words[name] });
     }
     requestAnimationFrame(frame);
   }
