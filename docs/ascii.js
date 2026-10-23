@@ -8,6 +8,9 @@
   const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ.:+';
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const TAU = Math.PI * 2;
+  // above the page's 860px breakpoint a project's screenshot window overlaps the side of its ASCII window,
+  // so scenes keep their subject clear of it; below, the windows stack and scenes centre
+  const sideBySide = matchMedia('(min-width: 861px)');
   const stored = () => { try { return localStorage.getItem('ep-motion'); } catch { return null; } };
   let paused = stored() ? stored() === 'off' : reduced.matches;
   const still = () => paused;
@@ -367,7 +370,7 @@
     return {
       setup({ w, h, atlas, dpr }) {
         s = Math.min(w / 2.5, h / 2.35);
-        cx = w > 520 ? w - s * 1.2 - w * 0.05 : w / 2; // clear of the screenshot window that overlaps the left
+        cx = sideBySide.matches ? w - s * 1.2 - w * 0.05 : w / 2;
         cy = h / 2 - s * 0.07;
         t0 = Math.max(0.028, (atlas.ch / dpr) * 0.55 / s);
       },
@@ -497,7 +500,7 @@
       const P = maps.portrait, M = maps.moogle;
       if (!view || !P || !M) return;
       // on desktop the screenshot window covers about the left third of this canvas
-      const wide = view.w > 520;
+      const wide = sideBySide.matches;
       const p = box.portrait, m = box.moogle;
       p.h = wide ? view.h * 0.94 : Math.min(view.h, (view.w * 0.8) * (P.h / P.w));
       p.w = p.h * (P.w / P.h);
