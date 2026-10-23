@@ -5,7 +5,7 @@
 
   // colours come from the page's tokens (read once the page has styled itself)
   let INK = '#141519', ACCENT = '#ff4f00', PAPER = '#f4f4f6';
-  const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ.:+';
+  const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ.:+|_=#\\-';
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const TAU = Math.PI * 2;
   // above the page's 860px breakpoint a project's screenshot window overlaps the side of its ASCII window,
@@ -46,7 +46,7 @@
   const views = [];
   function view(canvas, opts) {
     const ctx = canvas.getContext('2d');
-    const out = { v: 0, acc: 0 };
+    const out = { v: 0, acc: 0, ch: '' };
     const v = { canvas, opts, visible: false, dirty: true, last: 0, w: 0, h: 0, cols: 0, rows: 0, dpr: 1, atlas: null, codes: null };
 
     v.resize = () => {
@@ -81,11 +81,12 @@
         for (let i = 0; i < v.cols; i++, n++) {
           out.v = 0;
           out.acc = 0;
+          out.ch = '';
           scene((i + 0.5) * sx, py, t, out, i, j, v, n);
           const val = out.v;
           let code = 0, k = 0, level = 0;
           if (val >= 0.05) {
-            k = val < 0.14 ? index['.'] : val < 0.24 ? index[':'] : val < 0.34 ? index['+'] : index[word[(i + j * 3) % wl]];
+            k = out.ch ? index[out.ch] : val < 0.14 ? index['.'] : val < 0.24 ? index[':'] : val < 0.34 ? index['+'] : index[word[(i + j * 3) % wl]];
             level = out.acc ? 12 : Math.round(Math.min(1, alpha * (0.3 + 0.7 * val)) * 12);
             code = ((k + 1) << 5) | (level << 1) | out.acc;
           }
@@ -420,52 +421,90 @@
     };
   }
 
-  // ---------- Model Librarian: shelves, and a model landing in its slot ----------
+  // ---------- Model Librarian: a bookcase of models filed by base model, and a new one arriving ----------
+  // Drawn cell by cell in line glyphs: a wooden case (#), shelf planks (=), and books as classic ASCII
+  // spines with their titles running down them. The orange book drops into the gap on the middle shelf.
   function librarian() {
-    let shelves = [], books = [], slot = null, th = 4;
+    const TITLES = ['FLUX', 'PONY', 'SDXL', 'QWEN', 'WAN', 'LORA', 'VAE', 'CLIP', 'HIDREAM', 'ILLUSTRIOUS', 'CHROMA', 'LUMINA', 'KOLORS', 'AURA'];
+    let cols = 0, grid = null, slot = null, r0 = 0;
+    // one book's glyph at a cell relative to its box: a cap of underscores, | sides, = bands and a title
+    const bookCell = (b, i, j) => {
+      const x = i - b.x, y = j - b.top;
+      if (x < 0 || x >= b.w || y < 0 || y > b.h) return null;
+      const last = b.w - 1;
+      if (y === 0) return x === 0 || x === last ? null : { ch: '_', v: 0.8 };
+      if (x === 0 || x === last) return { ch: '|', v: 0.95 };
+      if (y === b.h) return { ch: '_', v: 0.8 };
+      if (b.bands && (y === 2 || y === b.h - 1)) return { ch: '=', v: 0.85 };
+      const mid = Math.floor(last / 2) || 1;
+      const k = y - (b.bands ? 3 : 2);
+      if (x === mid && k >= 0 && k < b.title.length && y < b.h - (b.bands ? 1 : 0)) return { ch: b.title[k], v: 1 };
+      return null;
+    };
     return {
-      setup({ w, h }) {
-        shelves = [h * 0.31, h * 0.64, h * 0.96];
-        th = Math.max(3, h * 0.018);
-        books = [];
-        slot = null;
-        const unit = w / 640;
-        let seed = 3;
+      setup(v) {
+        cols = v.cols;
+        const rows = v.rows;
+        grid = new Array(cols * rows).fill(null);
+        const put = (i, j, cell) => { if (i >= 0 && i < cols && j >= 0 && j < rows && cell) grid[j * cols + i] = cell; };
+        // above the page's breakpoint the screenshot window covers the right of this canvas
+        const c0 = Math.round(cols * (sideBySide.matches ? 0.04 : 0.06));
+        const c1 = Math.round(cols * (sideBySide.matches ? 0.6 : 0.94));
+        r0 = Math.round(rows * 0.08);
+        const r1 = Math.round(rows * 0.94);
+        // the case
+        for (let j = r0; j <= r1; j++) { put(c0, j, { ch: '#', v: 0.9 }); put(c1, j, { ch: '#', v: 0.9 }); }
+        for (let i = c0; i <= c1; i++) put(i, r0, { ch: '#', v: 0.9 });
+        const shelves = rows < 30 ? 2 : 3; // a small window keeps its shelves tall enough to read
+        const planks = Array.from({ length: shelves }, (_, k) => Math.round(r0 + ((r1 - r0) * (k + 1)) / shelves));
+        let seed = 11, ti = 0;
         const rnd = () => ((seed = (seed * 9301 + 49297) % 233280) / 233280);
-        shelves.forEach((base, s) => {
-          let x = w * 0.05;
-          while (x < w * 0.93) {
-            const bw = (24 + rnd() * 22) * unit;
-            if (s === 1 && !slot && x > w * 0.5) {
-              slot = { x, w: 30 * unit, base, h: h * 0.25 };
-              x += slot.w + 4 * unit;
+        slot = null;
+        planks.forEach((plank, s) => {
+          for (let i = c0 + 1; i < c1; i++) put(i, plank, { ch: '=', v: 0.9 });
+          const top = s === 0 ? r0 + 1 : planks[s - 1] + 1;
+          const space = plank - top; // rows between the plank above and this one
+          let x = c0 + 2;
+          while (x < c1 - 3) {
+            const w = 3 + Math.floor(rnd() * 3);
+            if (x + w > c1 - 1) break;
+            const h = Math.min(space - 1, Math.max(4, space - 1 - Math.floor(rnd() * 4)));
+            if (s === 1 && !slot && x > c0 + (c1 - c0) * (shelves === 2 ? 0.3 : 0.5)) {
+              slot = { x, w: 5, h: space - 2, top: plank - 1 - (space - 2), bands: true, title: 'LORA' };
+              x += 6;
               continue;
             }
-            books.push({ x, w: bw, base, h: h * (0.19 + rnd() * 0.08), band: 0.2 + rnd() * 0.25 });
-            x += bw + 3 * unit;
+            // the bottom shelf ends with a book leaning on its neighbour
+            if (s === shelves - 1 && x > c1 - 9) {
+              for (let y = 0; y < h; y++) {
+                const lx = x + Math.floor(y / 2);
+                put(lx, plank - h + y, { ch: '\\', v: 0.9 });
+                put(lx + 3, plank - h + y, { ch: '\\', v: 0.9 });
+              }
+              for (let i = 1; i < 3; i++) put(x + i, plank - h - 1, { ch: '_', v: 0.8 });
+              break;
+            }
+            const book = { x, w, h, top: plank - 1 - h, bands: rnd() > 0.35, title: TITLES[ti++ % TITLES.length] };
+            for (let j = book.top; j < plank; j++) for (let i = x; i < x + w; i++) put(i, j, bookCell(book, i, j));
+            x += w + (rnd() > 0.8 ? 1 : 0);
           }
         });
       },
-      at(px, py, t, out) {
-        for (const base of shelves) if (Math.abs(py - base - th) < th) { out.v = 0.9; return; }
-        const book = (b, acc, top) => {
-          if (px < b.x || px > b.x + b.w || py > b.base || py < top) return false;
-          const edge = px - b.x < 4 || b.x + b.w - px < 4 || py - top < 5;
-          const y = (py - top) / (b.base - top);
-          const band = Math.abs(y - (b.band || 0.25)) < 0.05 || Math.abs(y - 0.82) < 0.04;
-          out.v = edge || band ? 0.95 : 0.09;
-          out.acc = acc;
-          return true;
-        };
-        for (const b of books) if (book(b, 0, b.base - b.h)) return;
+      at(px, py, t, out, i, j) {
+        if (((px / 14) | 0) % 2 === 0 && ((py / 14) | 0) % 2 === 0) out.v = 0.06;
+        if (!grid) return;
+        // the new model drops in from above, sits for a while, then lifts out again
         if (slot) {
           const p = (t % 7) / 7;
           if (p < 0.9) {
-            const drop = p < 0.35 ? 1 - Math.pow(1 - p / 0.35, 3) : 1;
-            const top = slot.base - slot.h - (1 - drop) * slot.base;
-            book({ ...slot, base: top + slot.h, band: 0.3 }, 1, top);
+            const drop = p < 0.3 ? 1 - Math.pow(1 - p / 0.3, 3) : p > 0.82 ? 1 - (p - 0.82) / 0.08 : 1;
+            const fall = Math.round((1 - drop) * (slot.top + slot.h + 2));
+            const c = bookCell({ ...slot, top: slot.top - fall }, i, j);
+            if (c) { out.v = c.v; out.ch = c.ch; out.acc = 1; return; }
           }
         }
+        const c = grid[j * cols + i];
+        if (c) { out.v = c.v; out.ch = c.ch; }
       },
     };
   }
