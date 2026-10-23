@@ -215,22 +215,27 @@
       scene,
       word: () => s.word,
       tick(t, now) {
-        // morph, gaze and needle ease toward their targets
+        // the eye eases into the compass and back even while motion is paused; paused, the needle
+        // holds north and the gaze holds still, so the only movement is the shape changing
         const k = 1 - Math.exp(-1 / 60 * 7);
         const before = s.m;
-        s.m += (s.mt - s.m) * (still() ? 1 : k);
-        if (s.target) {
-          const tr = s.target.getBoundingClientRect();
-          const cr = canvas.getBoundingClientRect();
-          s.tht = Math.atan2(tr.top + tr.height / 2 - (cr.top + cy), tr.left + tr.width / 2 - (cr.left + cx));
-        }
-        s.th += wrap(s.tht - s.th) * (still() ? 1 : k * 1.3);
-        if (s.px !== null && now - s.lastMove < 6000) {
-          s.gx += (clamp((s.px - cx) / (v.w / 2), -1, 1) - s.gx) * k;
-          s.gy += (clamp((s.py - cy) / (v.h / 2), -1, 1) - s.gy) * k;
+        s.m += (s.mt - s.m) * k;
+        if (still()) {
+          s.th = s.tht = -Math.PI / 2;
         } else {
-          s.gx += (0.55 * Math.sin(t * 0.37) - s.gx) * k * 0.3;
-          s.gy += (0.35 * Math.sin(t * 0.29 + 1) - s.gy) * k * 0.3;
+          if (s.target) {
+            const tr = s.target.getBoundingClientRect();
+            const cr = canvas.getBoundingClientRect();
+            s.tht = Math.atan2(tr.top + tr.height / 2 - (cr.top + cy), tr.left + tr.width / 2 - (cr.left + cx));
+          }
+          s.th += wrap(s.tht - s.th) * k * 1.3;
+          if (s.px !== null && now - s.lastMove < 6000) {
+            s.gx += (clamp((s.px - cx) / (v.w / 2), -1, 1) - s.gx) * k;
+            s.gy += (clamp((s.py - cy) / (v.h / 2), -1, 1) - s.gy) * k;
+          } else {
+            s.gx += (0.55 * Math.sin(t * 0.37) - s.gx) * k * 0.3;
+            s.gy += (0.35 * Math.sin(t * 0.29 + 1) - s.gy) * k * 0.3;
+          }
         }
         // blink now and then, only as an eye
         if (!still() && s.m < 0.05) {
@@ -275,7 +280,6 @@
       s.py = e.clientY - cr.top;
       s.lastMove = performance.now();
       if (!s.hovered && s.target) release();
-      if (still()) v.dirty = true;
     }, { passive: true });
   }
 
