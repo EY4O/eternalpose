@@ -126,6 +126,7 @@
   // ---------- hero: eye to compass ----------
   function hero(canvas) {
     const s = { m: 0, mt: 0, gx: 0, gy: 0, px: null, py: null, th: -Math.PI / 2, tht: -Math.PI / 2, blink: 0, nextBlink: 3, target: null, word: 'ETERNALPOSE', lastMove: 0, tour: -1, tourAt: 0 };
+    if (still()) s.m = 1;
     let cx = 0, cy = 0, R = 1;
     let X, Y, RR, AX, FALL, LENS, CIRC, RAYS;
     const links = [...document.querySelectorAll('[data-compass]')];
@@ -215,11 +216,11 @@
       scene,
       word: () => s.word,
       tick(t, now) {
-        // the eye eases into the compass and back even while motion is paused; paused, the needle
-        // holds north and the gaze holds still, so the only movement is the shape changing
+        // paused, the page shows the compass with its needle held north and the gaze still; pausing
+        // or playing eases between eye and compass, so the only movement is the shape changing
         const k = 1 - Math.exp(-1 / 60 * 7);
         const before = s.m;
-        s.m += (s.mt - s.m) * k;
+        s.m += ((still() ? 1 : s.mt) - s.m) * k;
         if (still()) {
           s.th = s.tht = -Math.PI / 2;
         } else {
@@ -466,8 +467,67 @@
     };
   }
 
-  const scenes = { linemark, voyage, librarian };
-  const words = { linemark: 'LINEMARK', voyage: 'VOYAGE', librarian: 'LIBRARIAN' };
+  // ---------- XIV Plugins: a bag filling slot by slot, and the shopping list ticking off ----------
+  function xiv() {
+    let gx = 0, gy = 0, slot = 1, gap = 1, lx = 0, ly = 0, rowH = 1, lw = 1, box = 1, th = 3, list = true;
+    const COLS = 7, ROWS = 5, LIST = 6, PER = 5; // a 35-slot bag page; one list line done every five items
+    const lengths = [0.86, 0.62, 0.74, 0.5, 0.8, 0.58];
+    return {
+      setup({ w, h, atlas, dpr }) {
+        th = Math.max(3, (atlas.ch / dpr) * 0.5);
+        // on desktop the screenshot window covers the left of this canvas, so the bag sits on the right
+        // and the list is left out; on a phone the windows stack and both fit
+        list = w <= 520;
+        slot = Math.min((w * (list ? 0.52 : 0.6)) / COLS, (h * 0.78) / ROWS);
+        gap = slot * 0.16;
+        gx = list ? w * 0.06 : w - COLS * slot - w * 0.05;
+        gy = (h - ROWS * slot) / 2;
+        lx = w * 0.64;
+        lw = w * 0.3;
+        rowH = (h * 0.7) / LIST;
+        ly = h * 0.15;
+        box = Math.min(rowH * 0.5, lw * 0.12);
+      },
+      at(px, py, t, out) {
+        if (((px / 14) | 0) % 2 === 0 && ((py / 14) | 0) % 2 === 0) out.v = 0.06;
+        const filled = Math.floor((t / 1.1) % (COLS * ROWS + 6)); // items in the bag, then a short pause, then empty again
+        // the bag
+        const c = Math.floor((px - gx) / slot), r = Math.floor((py - gy) / slot);
+        if (c >= 0 && c < COLS && r >= 0 && r < ROWS) {
+          const sx = px - gx - c * slot, sy = py - gy - r * slot;
+          if (sx < gap / 2 || sy < gap / 2 || sx > slot - gap / 2 || sy > slot - gap / 2) return;
+          const n = r * COLS + c;
+          const edge = sx < gap / 2 + th || sy < gap / 2 + th || sx > slot - gap / 2 - th || sy > slot - gap / 2 - th;
+          if (edge) { out.v = 0.5; return; }
+          if (n < filled) {
+            const inset = slot * 0.26;
+            const item = sx > inset && sy > inset && sx < slot - inset && sy < slot - inset;
+            out.v = item ? 0.92 : 0.12;
+            if (item && n === filled - 1) out.acc = 1;
+          } else out.v = 0;
+          return;
+        }
+        // the shopping list
+        if (!list) return;
+        const k = Math.floor((py - ly) / rowH);
+        if (k < 0 || k >= LIST || px < lx || px > lx + lw) return;
+        const yy = py - ly - k * rowH - (rowH - box) / 2;
+        const done = Math.floor(filled / PER);
+        if (px < lx + box) {
+          if (yy < 0 || yy > box) return;
+          const edge = px < lx + th || px > lx + box - th || yy < th || yy > box - th;
+          if (k < done) { out.v = edge ? 0.95 : 0.9; if (k === done - 1 && filled % PER < 2) out.acc = 1; }
+          else if (edge) out.v = 0.9;
+          return;
+        }
+        const tx = px - lx - box * 1.6;
+        if (tx > 0 && tx < (lw - box * 1.6) * lengths[k] && Math.abs(yy - box / 2) < th) out.v = k < done ? 0.3 : 0.9;
+      },
+    };
+  }
+
+  const scenes = { linemark, voyage, librarian, xiv };
+  const words = { linemark: 'LINEMARK', voyage: 'VOYAGE', librarian: 'LIBRARIAN', xiv: 'XIVPLUGINS' };
 
   function init() {
     const eye = document.querySelector('canvas[data-ascii="hero"]');

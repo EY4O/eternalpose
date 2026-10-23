@@ -28,7 +28,8 @@ One maker's small set of carefully made tools, each with its own subdomain or re
   - Linemark: bookmark manager drawn like a transit map; Chrome and Edge; https://linemark.eternalpose.io/
   - One Piece Voyage Tracker: spoiler-safe companion for watching all 1,120+ episodes and 15 films in chronological order; web app; https://voyage.eternalpose.io/
   - Model Librarian suite: ComfyUI-Model-Librarian (ComfyUI model manager for Stability Matrix shared folders) and Chrome-Model-librarian (one click on CivitAI puts the model in the right ComfyUI folder). Both on GitHub under EY4O.
-- Hidden for now, not deleted: Prompto and ComfyUI-Prompto, Glass Dashboard, Bagcheck and RePlate (FFXIV plugins), DanChro English Patch. The list must make adding a project back trivial.
+  - XIV Plugins (added 2026-10-23): Looneth's Dalamud plugins for Final Fantasy XIV, RePlate and Bagcheck, installed from one repository feed. Directory and feed at https://xiv.eternalpose.io/ (moved from ey4o.github.io/XIV-Plugins, which redirects there; repository EY4O/XIV-Plugins). No game artwork on the hub.
+- Hidden for now, not deleted: Prompto and ComfyUI-Prompto, Glass Dashboard, DanChro English Patch. The list must make adding a project back trivial.
 - Contact and support: GitHub https://github.com/EY4O, Ko-fi https://ko-fi.com/looneth, business email iamlooneth@gmail.com. The personal email must never appear.
 - The site's subdomains (linemark., voyage.) are separate GitHub Pages sites; the hub only links to them.
 

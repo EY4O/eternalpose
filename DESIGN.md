@@ -146,7 +146,7 @@ A cool, slightly blue-grey neutral family with a single hot international-orange
 - **Slate** (ink-3): metadata in mono: project kind, facts lines, contact handles, the colophon. Measured 5.2:1 on ground and 5.8:1 on paper.
 
 ### Named Rules
-**The Needle Rule.** In the ASCII drawings, orange marks only the subject in motion or arrival (needle north, train, arriving book, hat band), and accent cells always draw at full opacity. Every other glyph is ink.
+**The Needle Rule.** In the ASCII drawings, orange marks only the subject in motion or arrival (needle north, train, arriving book, hat band, newest bag item), and accent cells always draw at full opacity. Every other glyph is ink.
 
 **The Orange Is Never Text Rule.** Orange on paper is 3.0:1, so orange never sets running text or labels on light grounds. It fills (with ink text on top, 5.5:1), underlines, or sits on the ink ticker.
 
@@ -233,7 +233,7 @@ Inherit the text color, with a 2px orange underline offset 4px. Top-bar links ha
 On desktop, a full-width strip of three columns divided by 1px ink rules, each with an index-title name, the mono kind and a graphite one-liner. Below 860px, three stacked rows with the kind right-aligned. Hover and focus invert the row to ink with paper text, using an inset paper focus outline (offset -5px). Each row also aims the hero compass at itself (see the ASCII renderer).
 
 ### Ticker
-A full-bleed ink band in paper mono, uppercase, padded 11px. It scrolls left continuously over 70s in a linear loop, with orange `+` separators spaced 1.25em. It is hidden from assistive tech and stops while motion is paused.
+A full-bleed ink band in paper mono, uppercase, padded 11px. It lists only the project names, seven rounds per copy so the loop never shows a gap on wide screens, and scrolls left continuously over 150s in a linear loop, with orange `+` separators spaced 1.25em. It is hidden from assistive tech and stops while motion is paused.
 
 ### ASCII Renderer (signature)
 Each canvas is a grid of Departure Mono cells (hero 13px, or 10px under 700px wide; project scenes 11px, or 9px under 500px; the Voyage scene 9px, or 7px). A scene returns a density per cell, and density chooses the glyph:
@@ -243,12 +243,13 @@ Each canvas is a grid of Departure Mono cells (hero 13px, or 10px under 700px wi
 - below 0.34: `+`
 - above that: a letter of the scene's word, picked by `(column + 3 × row) mod length`, so solid areas read as the word repeated (ETERNALPOSE, LINEMARK, VOYAGE, LIBRARIAN).
 
-Opacity is `alpha × (0.3 + 0.7 × density)`, quantised to twelfths (alpha 0.78 for the hero, 0.8 for scenes). Accent cells draw at full opacity in orange; everything else is ink. Backgrounds use a sparse dotted field (every other 14px block). Scenes animate only while visible (hero 30fps, scenes 24fps), and each frame redraws only the cells whose glyph, opacity or colour changed. The hero works out its fixed geometry (distances, angles, lid curves) once per resize. While motion is paused they draw one still frame and redraw only on change. The hero is the one exception: paused, it still eases between eye and compass when a project is chosen, but the needle holds north and the gaze stays fixed, so the only movement is the shape changing.
+Opacity is `alpha × (0.3 + 0.7 × density)`, quantised to twelfths (alpha 0.78 for the hero, 0.8 for scenes). Accent cells draw at full opacity in orange; everything else is ink. Backgrounds use a sparse dotted field (every other 14px block). Scenes animate only while visible (hero 30fps, scenes 24fps), and each frame redraws only the cells whose glyph, opacity or colour changed. The hero works out its fixed geometry (distances, angles, lid curves) once per resize. While motion is paused they draw one still frame and redraw only on change. The hero is the one exception: while paused it shows the compass, needle held north and gaze fixed, whether or not a project is chosen (choosing one only changes the word). Pausing or playing eases between eye and compass, so the only movement is the shape changing; a visit that starts paused opens on the compass.
 
 - **Hero, eye to compass:** a dim field of turning rays surrounds an almond eye whose iris follows the pointer (and drifts on its own after 6s idle) and blinks every 3.5–7.5s. When a project row is hovered or focused, the lids open into a circle, the iris becomes a dial with 32 ticks and 4 major marks, a needle grows (orange north, ink south) and swings to point at that row, and the glyphs switch to the project's word. All of these ease exponentially (rate 7/s). Leaving the row releases it back to the eye. After 9s without input, the compass tours the projects, aiming 2.6s and resting 2.2s.
 - **Linemark:** three transit lines with ring stations; an orange train runs along the middle line.
 - **Voyage Tracker:** the Straw Hat Jolly Roger in outline, with crossed bones, rippling like cloth. The hat band is orange.
 - **Model Librarian:** three shelves of books; one orange book drops into the gap on the middle shelf every 7s.
+- **XIV Plugins:** a 35-slot bag page (7 × 5) filling one item every 1.1s, the newest item orange, then emptying. On a phone a shopping list sits beside it, one line ticked off every five items (the newest tick orange); on desktop the screenshot window covers the left of this canvas, so the bag sits on the right and the list is left out.
 
 ### Striped EP Monogram
 "EP" in Anybody 900 at 60% width, stretched to the full content width and filled with horizontal ink stripes (7px bar, 4px gap). It closes the page and serves as the ground for the Contact window.

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Eternal Pose · Projects by Looneth</title>
-<meta name="description" content="Small tools by Looneth: Linemark, a bookmark manager drawn like a transit map; the One Piece Voyage Tracker; and Model Librarian for ComfyUI.">
+<meta name="description" content="Small tools by Looneth: Linemark, a bookmark manager drawn like a transit map; the One Piece Voyage Tracker; Model Librarian for ComfyUI; and Dalamud plugins for Final Fantasy XIV.">
 <link rel="canonical" href="https://eternalpose.io/">
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#E6E7EB">
@@ -66,7 +66,7 @@
   .name .w2 { align-self: flex-end; }
   .intro { grid-area: 1 / 1; align-self: end; justify-self: start; max-width: 25ch; margin: 0 0 0.35em; font-size: clamp(1.125rem, 1.6vw, 1.375rem); line-height: 1.35; font-weight: 500; text-wrap: pretty; }
 
-  .index ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; padding: 0; list-style: none; }
+  .index ul { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0; padding: 0; list-style: none; }
   .index li + li { border-left: 1px solid var(--ink); }
   .index a { display: grid; gap: 8px; height: 100%; padding: 16px 18px 18px; text-decoration: none; transition: background-color 0.12s, color 0.12s; }
   .index a:hover, .index a:focus-visible { background: var(--ink); color: var(--paper); outline-offset: -5px; outline-color: var(--paper); }
@@ -77,7 +77,7 @@
 
   /* ---------- ticker ---------- */
   .ticker { overflow: hidden; background: var(--ink); color: var(--paper); }
-  .ticker-track { display: flex; width: max-content; animation: tick 70s linear infinite; }
+  .ticker-track { display: flex; width: max-content; animation: tick 170s linear infinite; }
   .ticker p { margin: 0; padding: 11px 0; white-space: nowrap; }
   .ticker b { color: var(--accent); font-weight: 400; padding: 0 1.25em; }
   @keyframes tick { to { transform: translateX(-50%); } }
@@ -166,22 +166,23 @@
   </nav>
   <div class="stage">
     <h1 class="name"><span class="w1">Eternal</span> <span class="w2">Pose</span></h1>
-    <p class="intro">Small tools, carefully made by Looneth. A bookmark manager drawn like a transit map, a spoiler-safe way through One Piece, and a librarian for AI models.</p>
+    <p class="intro">Small tools, carefully made by Looneth. A bookmark manager drawn like a transit map, a spoiler-safe way through One Piece, a librarian for AI models, and plugins for Final Fantasy XIV.</p>
   </div>
   <nav class="win index" aria-labelledby="index-title">
-    <div class="win-bar"><span class="win-box"></span><h2 class="win-title" id="index-title">Projects</h2><span class="win-count">3 items</span></div>
+    <div class="win-bar"><span class="win-box"></span><h2 class="win-title" id="index-title">Projects</h2><span class="win-count">4 items</span></div>
     <ul>
       <li><a href="#linemark" data-compass="LINEMARK"><span class="pname">Linemark</span><span class="pkind mono">Chrome + Edge</span><span class="pline">Bookmarks drawn like a transit map.</span></a></li>
       <li><a href="#voyage" data-compass="VOYAGE"><span class="pname">Voyage Tracker</span><span class="pkind mono">Web app</span><span class="pline">One Piece in order, without spoilers.</span></a></li>
       <li><a href="#librarian" data-compass="LIBRARIAN"><span class="pname">Model Librarian</span><span class="pkind mono">ComfyUI + Chrome</span><span class="pline">Every model in its place.</span></a></li>
+      <li><a href="#xiv" data-compass="XIVPLUGINS"><span class="pname">XIV Plugins</span><span class="pkind mono">Dalamud</span><span class="pline">Plugins for Final Fantasy XIV.</span></a></li>
     </ul>
   </nav>
 </header>
 
 <div class="ticker mono" aria-hidden="true">
   <div class="ticker-track">
-    <p>Eternal Pose is the compass that always points to one island<b>+</b>This one points to whatever Looneth is building<b>+</b>Linemark<b>+</b>Voyage Tracker<b>+</b>Model Librarian<b>+</b></p>
-    <p>Eternal Pose is the compass that always points to one island<b>+</b>This one points to whatever Looneth is building<b>+</b>Linemark<b>+</b>Voyage Tracker<b>+</b>Model Librarian<b>+</b></p>
+    <p>Linemark<b>+</b>Voyage Tracker<b>+</b>Model Librarian<b>+</b>XIV Plugins<b>+</b>Linemark<b>+</b>Voyage Tracker<b>+</b>Model Librarian<b>+</b>XIV Plugins<b>+</b>Linemark<b>+</b>Voyage Tracker<b>+</b>Model Librarian<b>+</b>XIV Plugins<b>+</b>Linemark<b>+</b>Voyage Tracker<b>+</b>Model Librarian<b>+</b>XIV Plugins<b>+</b>Linemark<b>+</b>Voyage Tracker<b>+</b>Model Librarian<b>+</b>XIV Plugins<b>+</b>Linemark<b>+</b>Voyage Tracker<b>+</b>Model Librarian<b>+</b>XIV Plugins<b>+</b></p>
+    <p>Linemark<b>+</b>Voyage Tracker<b>+</b>Model Librarian<b>+</b>XIV Plugins<b>+</b>Linemark<b>+</b>Voyage Tracker<b>+</b>Model Librarian<b>+</b>XIV Plugins<b>+</b>Linemark<b>+</b>Voyage Tracker<b>+</b>Model Librarian<b>+</b>XIV Plugins<b>+</b>Linemark<b>+</b>Voyage Tracker<b>+</b>Model Librarian<b>+</b>XIV Plugins<b>+</b>Linemark<b>+</b>Voyage Tracker<b>+</b>Model Librarian<b>+</b>XIV Plugins<b>+</b>Linemark<b>+</b>Voyage Tracker<b>+</b>Model Librarian<b>+</b>XIV Plugins<b>+</b></p>
   </div>
 </div>
 
@@ -267,6 +268,41 @@
       <figure class="win shot tall">
         <div class="win-bar"><span class="win-box"></span><span class="win-title">CivitAI · sample data</span></div>
         <img src="images/librarian-chrome.webp" width="780" height="1010" loading="lazy" decoding="async" alt="The browser extension's panel on a CivitAI model page, recommending the file that fits an RTX 4070 and the text encoder and VAE it also needs.">
+      </figure>
+    </div>
+  </article>
+  <article class="project flip" id="xiv" aria-labelledby="xiv-name">
+    <h2 class="p-name" id="xiv-name">XIV Plugins</h2>
+    <div class="p-side">
+      <p class="p-pitch">Dalamud plugins for Final Fantasy XIV.</p>
+      <div class="p-part">
+        <h3>RePlate</h3>
+        <p class="p-desc">Save and restore your adventurer plate and your gear sets' portraits, and share them with friends as a short code.</p>
+        <ul class="p-links">
+          <li><a class="btn" href="https://xiv.eternalpose.io/plugins/replate/">Plugin page</a></li>
+        </ul>
+      </div>
+      <div class="p-part">
+        <h3>Bagcheck</h3>
+        <p class="p-desc">A shopping list and retainer tracker for crafters: what you need, what you have across your bags and retainers, and where it's cheapest.</p>
+        <ul class="p-links">
+          <li><a class="btn" href="https://xiv.eternalpose.io/plugins/bagcheck/">Plugin page</a></li>
+        </ul>
+      </div>
+      <ul class="p-links">
+        <li><a class="btn default" href="https://xiv.eternalpose.io/">How to install</a></li>
+        <li><a class="btn" href="https://github.com/EY4O/XIV-Plugins" rel="noopener">Source</a></li>
+      </ul>
+      <p class="p-facts mono">Free · MIT licence · One repository link for Dalamud</p>
+    </div>
+    <div class="p-visual">
+      <figure class="win ascii-win">
+        <div class="win-bar"><span class="win-box"></span><span class="win-title">XIV Plugins</span><a class="win-plus hit" href="https://xiv.eternalpose.io/" aria-label="Open the XIV Plugins directory">[+]</a></div>
+        <canvas data-ascii="xiv" aria-hidden="true"></canvas>
+      </figure>
+      <figure class="win shot">
+        <div class="win-bar"><span class="win-box"></span><span class="win-title">Plugin directory</span></div>
+        <img src="images/xiv-directory.webp" width="1440" height="1180" loading="lazy" decoding="async" alt="The XIV Plugins directory: RePlate and Bagcheck with their release numbers, each with a one-line description.">
       </figure>
     </div>
   </article>
