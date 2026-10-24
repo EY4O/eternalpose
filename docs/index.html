@@ -9,7 +9,7 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://eternalpose.io/">
 <meta property="og:title" content="Eternal Pose · Projects by Looneth">
-<meta property="og:description" content="Small tools by Looneth: a bookmark manager drawn like a transit map, a spoiler-safe way through One Piece, a librarian for AI models, and plugins for Final Fantasy XIV.">
+<meta property="og:description" content="Small tools by Looneth: a bookmark manager drawn like a transit map, a spoiler-safe way through One Piece, a librarian for AI models and what they make, and plugins for Final Fantasy XIV.">
 <meta property="og:image" content="https://eternalpose.io/images/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -123,6 +123,7 @@
   .flip .shot { grid-column: 1 / 7; }
   .shot.tall { grid-column: 9 / -1; grid-row: 2; margin: -14% 6% 0 0; }
   .librarian .shot:not(.tall) { grid-column: 6 / 11; margin-bottom: -4%; }
+  .librarian .shot.lower { grid-column: 3 / 9; grid-row: 2; align-self: start; margin: -2% 0 0; }
 
   /* ---------- end ---------- */
   .end { position: relative; margin-top: clamp(120px, 15vw, 220px); padding: 0 var(--gut) var(--gut); }
@@ -153,6 +154,7 @@
     .ascii-win canvas[data-ascii="xiv"] { aspect-ratio: 1; } /* room for the portrait's face */
     .project .p-visual .shot { grid-column: 1; grid-row: 2; align-self: start; margin: -9% 0 0 16%; }
     .project .p-visual .shot.tall { grid-row: 3; margin: -6% 34% 0 6%; }
+    .project .p-visual .shot.lower { grid-row: 4; margin: -10% 0 0 22%; }
     .contact { position: relative; right: auto; top: auto; width: auto; margin-top: -12%; }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -177,14 +179,14 @@
   </nav>
   <div class="stage">
     <h1 class="name"><span class="w1">Eternal</span> <span class="w2">Pose</span></h1>
-    <p class="intro">Small tools, carefully made by Looneth. A bookmark manager drawn like a transit map, a spoiler-safe way through One Piece, a librarian for AI models, and plugins for Final Fantasy XIV.</p>
+    <p class="intro">Small tools, carefully made by Looneth. A bookmark manager drawn like a transit map, a spoiler-safe way through One Piece, a librarian for AI models and what they make, and plugins for Final Fantasy XIV.</p>
   </div>
   <nav class="win index" aria-labelledby="index-title">
     <div class="win-bar"><span class="win-box"></span><h2 class="win-title" id="index-title">Projects</h2><span class="win-count">4 items</span></div>
     <ul>
       <li><a href="#linemark" data-compass="LINEMARK"><span class="pname">Linemark</span><span class="pkind mono">Chrome + Edge</span><span class="pline">Bookmarks drawn like a transit map.</span></a></li>
       <li><a href="#voyage" data-compass="VOYAGE"><span class="pname">Voyage Tracker</span><span class="pkind mono">Web app</span><span class="pline">One Piece in order, without spoilers.</span></a></li>
-      <li><a href="#librarian" data-compass="LIBRARIAN"><span class="pname">Model Librarian</span><span class="pkind mono">ComfyUI + Chrome</span><span class="pline">Every model in its place.</span></a></li>
+      <li><a href="#librarian" data-compass="LIBRARIAN"><span class="pname">Model Librarian</span><span class="pkind mono">ComfyUI + Chrome + PC</span><span class="pline">Every model in its place.</span></a></li>
       <li><a href="#xiv" data-compass="XIVPLUGINS"><span class="pname">XIV Plugins</span><span class="pkind mono">Dalamud</span><span class="pline">Plugins for Final Fantasy XIV.</span></a></li>
     </ul>
   </nav>
@@ -265,7 +267,15 @@
           <li><a class="btn" href="https://github.com/EY4O/Chrome-Model-librarian" rel="noopener">Source</a></li>
         </ul>
       </div>
-      <p class="p-facts mono">Free · Open source · ComfyUI custom nodes and a browser extension</p>
+      <div class="p-part">
+        <h3>Gallery, for Windows</h3>
+        <p class="p-desc">A fast gallery for every image and video you've generated. It reads the prompt, settings, models and workflow saved in each file, so you can search, rate and count them, and nothing leaves your PC.</p>
+        <ul class="p-links">
+          <li><a class="btn" href="https://github.com/EY4O/Model-Librarian-Gallery/releases/latest" rel="noopener">Download</a></li>
+          <li><a class="btn" href="https://github.com/EY4O/Model-Librarian-Gallery" rel="noopener">Source</a></li>
+        </ul>
+      </div>
+      <p class="p-facts mono">Free · Open source · ComfyUI custom nodes, a browser extension and a Windows app</p>
     </div>
     <div class="p-visual">
       <figure class="win ascii-win">
@@ -279,6 +289,10 @@
       <figure class="win shot tall">
         <div class="win-bar"><span class="win-box"></span><span class="win-title">CivitAI · sample data</span></div>
         <img src="images/librarian-chrome.webp" width="780" height="1010" loading="lazy" decoding="async" alt="The browser extension's panel on a CivitAI model page, recommending the file that fits an RTX 4070 and the text encoder and VAE it also needs.">
+      </figure>
+      <figure class="win shot lower">
+        <div class="win-bar"><span class="win-box"></span><span class="win-title">Gallery · sample data</span></div>
+        <img src="images/gallery-viewer.webp" width="1280" height="800" loading="lazy" decoding="async" alt="Model Librarian Gallery's viewer: a generated image beside its tags, albums, prompt, settings and the checkpoint that made it.">
       </figure>
     </div>
   </article>
