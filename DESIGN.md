@@ -281,7 +281,7 @@ Opacity is `alpha × (0.3 + 0.7 × density)`, quantised to twelfths (alpha 0.78 
 "EP" in Anybody 900 at 60% width, stretched to the full content width and filled with horizontal ink stripes (7px bar, 4px gap). It closes the page and serves as the ground for the Contact window.
 
 ### Social Card
-`images/og.png`, 1200×630: the hero alone (name and compass, needle north, with the intro, Projects window and links hidden), captured from the page itself. Referenced by `og:image` with `twitter:card` set to `summary_large_image`. Regenerate it whenever the hero changes.
+`images/og.png`, 1200×630: the hero alone (name and compass, needle north, with the intro, Projects window and links hidden), captured from the page itself. Referenced by `og:image` with `twitter:card` set to `summary_large_image`. Regenerate it whenever the hero changes: open the page at 1200×630 with motion paused, hide `.index`, `.intro`, `.bar ul` and `.bar .by`, and screenshot the viewport.
 
 ## Do's and Don'ts
 
