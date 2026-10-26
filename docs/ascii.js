@@ -475,13 +475,17 @@
               continue;
             }
             // the bottom shelf ends with a book leaning on its neighbour
+            // (its foot slides one column for every two rows, so a tall one is shortened to keep the foot inside the case)
             if (s === shelves - 1 && x > c1 - 9) {
-              for (let y = 0; y < h; y++) {
-                const lx = x + Math.floor(y / 2);
-                put(lx, plank - h + y, { ch: '\\', v: 0.9 });
-                put(lx + 3, plank - h + y, { ch: '\\', v: 0.9 });
+              const lh = Math.min(h, 2 * (c1 - 5 - x) + 2);
+              if (lh >= 4) {
+                for (let y = 0; y < lh; y++) {
+                  const lx = x + Math.floor(y / 2);
+                  put(lx, plank - lh + y, { ch: '\\', v: 0.9 });
+                  put(lx + 3, plank - lh + y, { ch: '\\', v: 0.9 });
+                }
+                for (let i = 1; i < 3; i++) put(x + i, plank - lh - 1, { ch: '_', v: 0.8 });
               }
-              for (let i = 1; i < 3; i++) put(x + i, plank - h - 1, { ch: '_', v: 0.8 });
               break;
             }
             const book = { x, w, h, top: plank - 1 - h, bands: rnd() > 0.35, title: TITLES[ti++ % TITLES.length] };
