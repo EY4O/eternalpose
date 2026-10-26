@@ -5,6 +5,7 @@ The home page at [eternalpose.io](https://eternalpose.io): Looneth's projects.
 GitHub Pages publishes the `docs/` folder (`docs/CNAME` sets the domain). Projects with their own sites use subdomains:
 [linemark.eternalpose.io](https://linemark.eternalpose.io) (from [EY4O/linemark](https://github.com/EY4O/linemark)'s `docs/`) and
 [voyage.eternalpose.io](https://voyage.eternalpose.io) (from [EY4O/One-Piece-Voyage-Tracker](https://github.com/EY4O/One-Piece-Voyage-Tracker)) and
+[librarian.eternalpose.io](https://librarian.eternalpose.io) (from [EY4O/ComfyUI-Model-Librarian](https://github.com/EY4O/ComfyUI-Model-Librarian)'s `docs/`) and
 [xiv.eternalpose.io](https://xiv.eternalpose.io) (from [EY4O/XIV-Plugins](https://github.com/EY4O/XIV-Plugins)'s `docs/`).
 
 ## Layout
