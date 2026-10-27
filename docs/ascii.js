@@ -4,7 +4,7 @@
   'use strict';
 
   // colours come from the page's tokens (read once the page has styled itself)
-  let INK = '#141519', ACCENT = '#ff4f00', PAPER = '#f4f4f6';
+  let INK = '#141519', ACCENT = '#ff4f00', SCREEN_INK = '#f4f4f6';
   const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ.:+|_=#\\-';
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const TAU = Math.PI * 2;
@@ -15,7 +15,7 @@
   let paused = stored() ? stored() === 'off' : reduced.matches;
   const still = () => paused;
 
-  // ---------- glyph atlas: one row of ink glyphs, one row of accent glyphs ----------
+  // ---------- glyph atlas: a row of ink glyphs, a row of accent glyphs, a row for the XIV capture screen ----------
   const atlases = new Map();
   function atlasFor(fs) {
     if (atlases.has(fs)) return atlases.get(fs);
@@ -31,7 +31,7 @@
     ctx.font = font;
     ctx.textBaseline = 'middle';
     ctx.textAlign = 'center';
-    [INK, ACCENT, PAPER].forEach((colour, row) => { // rows: ink, accent, and paper for inverted windows
+    [INK, ACCENT, SCREEN_INK].forEach((colour, row) => { // rows: ink, accent, and light glyphs for the inverted window
       ctx.fillStyle = colour;
       for (let k = 0; k < CHARS.length; k++) ctx.fillText(CHARS[k], k * cw + cw / 2, row * ch + ch / 2);
     });
@@ -601,12 +601,24 @@
   const scenes = { linemark, voyage, librarian, xiv };
   const words = { linemark: 'LINEMARK', voyage: 'VOYAGE', librarian: 'LIBRARIAN', xiv: 'XIVPLUGINS' };
 
-  function init() {
+  // colours from the page's tokens; again whenever the theme changes, with every canvas redrawn in the new ones
+  function colours() {
     const css = getComputedStyle(document.documentElement);
     const token = (name, fallback) => css.getPropertyValue(name).trim() || fallback;
     INK = token('--ink', INK);
     ACCENT = token('--accent', ACCENT);
-    PAPER = token('--paper', PAPER);
+    SCREEN_INK = token('--screen-ink', SCREEN_INK);
+  }
+  function recolour() {
+    colours();
+    atlases.clear();
+    views.forEach((v) => v.resize());
+  }
+
+  function init() {
+    colours();
+    new MutationObserver(recolour).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    matchMedia('(prefers-color-scheme: dark)').addEventListener('change', recolour);
     const eye = document.querySelector('canvas[data-ascii="hero"]');
     if (eye) hero(eye);
     for (const c of document.querySelectorAll('canvas[data-ascii]:not([data-ascii="hero"])')) {
