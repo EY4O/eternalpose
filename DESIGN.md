@@ -240,7 +240,7 @@ Every corner is square. The language is the 1px ink line, used for window frames
 Classic system buttons, flat and labelled in mono.
 - **Shape:** square, 1px ink border, minimum height 44px, 16px side padding.
 - **Secondary:** paper fill, ink label. Hover fills with orange behind the ink label; press nudges down 1px. Colors transition over 0.12s, with no transition under reduced motion.
-- **Default:** the one recommended action per product (Add to Chrome, Open the tracker, Comfy Registry). Ink fill with paper label, wrapped in the old default-button ring: a 3px ground gap and then a 1px ink line (`box-shadow: 0 0 0 3px var(--ground), 0 0 0 4px var(--ink)`), with a margin that leaves room for the ring. Hover turns it orange with an ink label. Use at most one per product block.
+- **Default:** the one recommended action per product (Add to Chrome, Open the tracker, Model Librarian's Website). Ink fill with paper label, wrapped in the old default-button ring: a 3px ground gap and then a 1px ink line (`box-shadow: 0 0 0 3px var(--ground), 0 0 0 4px var(--ink)`), with a margin that leaves room for the ring. Hover turns it orange with an ink label. Use at most one per product block.
 - **Focus:** the global 2px ink outline, offset 3px.
 
 ### Links
