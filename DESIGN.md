@@ -240,7 +240,7 @@ Every corner is square. The language is the 1px ink line, used for window frames
 Classic system buttons, flat and labelled in mono.
 - **Shape:** square, 1px ink border, minimum height 44px, 16px side padding.
 - **Secondary:** paper fill, ink label. Hover fills with orange behind the ink label; press nudges down 1px. Colors transition over 0.12s, with no transition under reduced motion.
-- **Default:** the one recommended action per product (Add to Chrome, Open the tracker, Model Librarian's Website). Ink fill with paper label, wrapped in the old default-button ring: a 3px ground gap and then a 1px ink line (`box-shadow: 0 0 0 3px var(--ground), 0 0 0 4px var(--ink)`), with a margin that leaves room for the ring. Hover turns it orange with an ink label. Use at most one per product block.
+- **Default:** the one recommended action per product, or per part when a product has several (Add to Chrome, Open the tracker; Model Librarian's Website, Chrome Web Store and Gallery Download). Ink fill with paper label, wrapped in the old default-button ring: a 3px ground gap and then a 1px ink line (`box-shadow: 0 0 0 3px var(--ground), 0 0 0 4px var(--ink)`), with a margin that leaves room for the ring. Hover turns it orange with an ink label. Use at most one per product block, or one per `.p-part` in a suite.
 - **Focus:** the global 2px ink outline, offset 3px.
 
 ### Links
@@ -292,7 +292,7 @@ Opacity is `alpha × (0.3 + 0.7 × density)`, quantised to twelfths (alpha 0.78 
 - **Do** set every label, button and window title in uppercase Departure Mono, and bracket standalone chrome links.
 - **Do** make a new ASCII scene spell its own word with the density ramp (`.` `:` `+` then letters), ink by default, with orange only for the subject that moves or arrives.
 - **Do** overlap each spread's real-screenshot window onto its ASCII window, and alternate the side from spread to spread.
-- **Do** mark one default button per product with the ring (3px ground gap, 1px ink line).
+- **Do** mark one default button per product (one per part in a suite) with the ring (3px ground gap, 1px ink line).
 - **Do** stop every animation (ticker, scenes, morph easing) and draw still frames while motion is paused. Paused follows prefers-reduced-motion until the visitor uses the [Pause motion] / [Play motion] toggle in the top bar, which is remembered (localStorage `ep-motion`). The toggle owns everything, the ticker included: the page carries `.still` when paused and `.motion-on` when playing, and the reduced-motion CSS stops the ticker only without `.motion-on`.
 - **Do** give small chrome links (top bar, [+], colophon) a 44px hit area with the `.hit` class, an invisible `::after` that extends 14px above and below and 8px to each side, so they keep their small look. Contact rows are 44px links in their own right (14px padding).
 
